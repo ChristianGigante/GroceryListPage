@@ -1,20 +1,14 @@
-export default function () {
-    //Import the mongoose module
-    const mongoose = require('mongoose');
-
-    //Set up default mongoose connection
-    const mongoDB = 'mongodb://127.0.0.1/test';
-    mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
-
-    //Get the default connection
-    var db = mongoose.connection;
-
-    //Bind connection to error event (to get notification of connection errors)
-    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-    //open connection
-    db.once('open', function () {
-        // we're connected!
-        console.log('connected!')
-    });
-}
+// database.js
+const mongoose = require("mongoose");
+const dbPath = "mongodb://<dbuser>:<dbpassword>@ds250607.mlab.com:38485/test-db";
+mongoose.connect(dbPath, {
+    useNewUrlParser: true,
+});
+const db = mongoose.connection;
+db.on("error", () => {
+    console.log("> error occurred from the database");
+});
+db.once("open", () => {
+    console.log("> successfully opened the database");
+});
+module.exports = mongoose;
