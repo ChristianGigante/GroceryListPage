@@ -10,19 +10,80 @@
 
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <title>GroceryList</title>
+    <title>Grocery List</title>
 </head>
+<style>
+    body {
+        color: #000;
+        font-size: 20px;
+        line-height: 135%;
+        width: 100%;
+        word-break: break-word;
+        width: 80%;
+        margin-left: 10%;
+    }
+</style>
 
 <body>
+    <center>
+        <br><br>
+        <div style="height: auto;width : 500px;" id="showForm">
+            <input type="text" class="form-control" name="item" placeholder="Item"><br><br>
+            <input type="text" class="form-control" name="quantity" placeholder="Quantity"><br><br>
+            <input type="text" class="form-control" name="priority" placeholder="Priority"><br><br>
+            <button id="addItem" class="btn btn-success">ADD TO LIST</button>
+        </div>
+        <br><br>
+        <button id="retrieveAllData" class="btn btn-success">Retrieve All Data</button>
 
-        <input type="text" name="item" placeholder="Item">
-        <input type="text" name="quantity" placeholder="quantity">
-        <input type="text" name="priority" placeholder="priority">
-        <input type="submit" class="btn btn-primary" id="addItem">
- 
+    </center>
+
+    <div class="container" style="display:inline;">
+        <div id="showTable">
+            <br><br>
+            <button id="addItem" class="btn btn-primary">ADD ITEM</button>
+            <br><br>
+            <table class="table ">
+                <thead class="thead" style="text-align: center">
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Priority</th>
+                </thead>
+                <tbody id="tbody">
+                    <tr>
+                        <td>
+
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
 
     <script>
         $(document).ready(function () {
+            $("#retrieveAllData").on('click', function (e) {
+                e.preventDefault(e);
+                // alert('hi')
+                $.ajax({
+                    url: "item/retrieve/all",
+                    crossDomain: true,
+                    type: "GET",
+                    success: function (data) {
+                        data.forEach(element => {
+                            $("#tbody").append("<tr style ='text-align:center'><td>" + element.item + "</td><td>" + element.quantity + "</td><td>" + element.priority + "</td></tr>");
+                        });
+
+                        // $("#tbody").append("<tr style ='text-align:center'><td>" + data.item + "</td><td>" + data.quantity + "</td><td>" + data.priority + "</td></tr>");
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                })
+            })
+
+
             $("#addItem").on('click', function (e) {
                 e.preventDefault(e);
                 var boolean = true;
@@ -58,7 +119,7 @@
                     alert('All fields must be filled!')
                 }
 
-                $('input[type="text"]').empty();                
+                $('input[type="text"]').empty();
 
             });
         });

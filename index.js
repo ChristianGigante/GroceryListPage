@@ -45,10 +45,17 @@ app.get('/item/retrieve/all', function (req,res) {
 
 ///item/retrieve/:id - GET
 app.get('/item/retrieve/:id', function (req,res) {
-  console.log(req.params.itemId)
-  //item.findOne(req,res);
+  //console.log(req.params.id)
+  let id = req.params.id;
+  item.findOne(req,res,id);
 })
 
+//update an item
+//item/update - POST
+app.post('/item/update',function (req,res) {
+  let id = req.params.id;
+  item.update(req,res,id);
+})
 
 // listen for requests
 app.listen(port, () => {

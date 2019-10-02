@@ -12,7 +12,7 @@ module.exports.create = (req, res) => {
     // Create a new Item
     const newItem = new Item({
         item: req.body.item, 
-        quatity: req.body.quatity,
+        quantity: req.body.quantity,
         priority: req.body.priority
     });
 
@@ -42,59 +42,60 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single item with a itemId
-exports.findOne = (req, res) => {
-    Item.findById(req.params.itemId)
+exports.findOne = (req, res, id) => {
+    Item.findById(id)
     .then(items => {
         if(!items) {
             return res.status(404).send({
-                message: "Note not found with id " + req.params.itemId
+                message: "Note not found with id " + id
             });            
         }
         res.send(items);
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
-                message: "Note not found with id " + req.params.itemId
+                message: "Note not found with id " + id
             });                
         }
         return res.status(500).send({
-            message: "Error retrieving item with id " + req.params.itemId
+            message: "Error retrieving item with id " + id
         });
     });
 };
 
-// // Update a note identified by the noteId in the request
-// exports.update = (req, res) => {
-//     // Validate Request
-//     if(!req.body.content) {
-//         return res.status(400).send({
-//             message: "Note content can not be empty"
-//         });
-//     }
+// Update a note identified by the noteId in the request
+exports.update = (req, res, id) => {
+    // Validate Request
+    // if(!req.body.content) {
+    //     return res.status(400).send({
+    //         message: "Note content can not be empty"
+    //     });
+    // }
 
-//     // Find note and update it with the request body
-//     Note.findByIdAndUpdate(req.params.noteId, {
-//         title: req.body.title || "Untitled Note",
-//         content: req.body.content
-//     }, {new: true})
-//     .then(note => {
-//         if(!note) {
-//             return res.status(404).send({
-//                 message: "Note not found with id " + req.params.noteId
-//             });
-//         }
-//         res.send(note);
-//     }).catch(err => {
-//         if(err.kind === 'ObjectId') {
-//             return res.status(404).send({
-//                 message: "Note not found with id " + req.params.noteId
-//             });                
-//         }
-//         return res.status(500).send({
-//             message: "Error updating note with id " + req.params.noteId
-//         });
-//     });
-// };
+    // Find note and update it with the request body
+    Item.findByIdAndUpdate(id, {
+        item: req.body.item, 
+        quatity: req.body.quatity,
+        priority: req.body.priority
+    }, {new: true})
+    .then(items => {
+        if(!items) {
+            return res.status(404).send({
+                message: "Note not found with id " + id
+            });
+        }
+        res.send(items);
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            return res.status(404).send({
+                message: "Note not found with id " + id
+            });                
+        }
+        return res.status(500).send({
+            message: "Error updating note with id " + id
+        });
+    });
+};
 
 // // Delete a note with the specified noteId in the request
 // exports.delete = (req, res) => {
