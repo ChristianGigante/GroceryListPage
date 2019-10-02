@@ -1,12 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>GroceryList</title>
 </head>
+
 <body>
-    Hello World!
+
+        <input type="text" name="item" placeholder="Item">
+        <input type="text" name="quantity" placeholder="quantity">
+        <input type="text" name="priority" placeholder="priority">
+        <input type="submit" class="btn btn-primary" id="addItem">
+ 
+
+    <script>
+        $(document).ready(function () {
+            $("#addItem").on('click', function (e) {
+                e.preventDefault(e);
+                var boolean = true;
+                var item = $('input[name="item"]');
+                var quantity = $('input[name="quantity"]');
+                var priority = $('input[name="priority"]');
+                //iterate all input fields
+                $('input[type="text"]').each(function () {
+                    if ($(this).val() == "") {
+                        boolean = false;
+                    }
+                })
+
+                if (boolean == true) {
+                    $.ajax({
+                        url: "item/create",
+                        crossDomain: true,
+                        type: "PUT",
+                        data: {
+                            item: item.val(),
+                            quantity: quantity.val(),
+                            priority: priority.val()
+                        },
+                        success: function (data) {
+                            console.log(data);
+                        },
+                        error: function (e) {
+                            console.log(e);
+                        }
+                    })
+                }
+                else {
+                    alert('All fields must be filled!')
+                }
+
+                $('input[type="text"]').empty();                
+
+            });
+        });
+    </script>
+
 </body>
+
+
 </html>

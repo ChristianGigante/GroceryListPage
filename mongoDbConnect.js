@@ -11,4 +11,4 @@ db.on("error", () => {
 db.once("open", () => {
     console.log("> successfully opened the database");
 });
-module.exports = mongoose;
+module.exports = mongooseDBConnect;

@@ -1,60 +1,56 @@
 const port = 3000;
 const express = require('express');
+const bodyParser = require('body-parser');
+// create express app
 const app = express();
 //Import the mongoose module
 const mongoose = require('mongoose');
+const item = require('./myController');
 const path = require('path');
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 app.all('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 
-//Set up default mongoose connection
-const mongoDB = 'mongodb://127.0.0.1/test';
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+// Configuring the database
+const dbConfig = 'mongodb://127.0.0.1/test';
 
-//Get the default connection
-var db = mongoose.connection;
+mongoose.Promise = global.Promise;
 
-//Bind connection to error event (to get notification of connection errors)
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-//open connection
-db.once('open', function () {
-  // we're connected!
-  console.log('connected!')
+// Connecting to the database
+mongoose.connect(dbConfig, { useNewUrlParser: true, useUnifiedTopology: true }
+  ).then(() => {
+    console.log("Successfully connected to the database");    
+}).catch(err => {
+    console.log('Could not connect to the database. Exiting now...', err);
+    process.exit();
 });
 
-//Define a schema
-var Schema = mongoose.Schema;
-
-var SomeModelSchema = new Schema({
-  item: String,
-  quantity: Int16Array,
-  priority: String
+//adding new Item
+app.put('/item/create', function (req,res) {
+  item.create(req,res);
 });
 
-// Compile model from schema
-var SomeModel = mongoose.model('SomeModel', SomeModelSchema);
+//retrieve all Items in DB
+app.get('/item/retrieve/all', function (req,res) {
+  item.findAll(req,res);
+})
 
-// Create an instance of model SomeModel
-var awesome_instance = new SomeModel({ a_string: 'awesome' });
-
-// Save the new model instance, passing a callback
-awesome_instance.save(function (err) {
-  if (err) return handleError(err);
-  // saved!
-  console.log('save!');
-});
+///item/retrieve/:id - GET
+app.get('/item/retrieve/:id', function (req,res) {
+  console.log(req.params.itemId)
+  //item.findOne(req,res);
+})
 
 
-//OrElse
-//   SomeModel.create({ name: 'also_awesome' }, function (err, awesome_instance) {
-//     if (err) return handleError(err);
-//     // saved!
-//   });
-
-app.listen(port, function () {
-  console.log("Listening to " + port);
+// listen for requests
+app.listen(port, () => {
+  console.log("Server is listening on port " + port);
 });
