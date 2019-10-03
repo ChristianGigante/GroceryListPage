@@ -6,7 +6,6 @@ var Schema = mongoose.Schema;
 var Shop = new Schema({
   item: {
     type: String,
-    unique: true,
     required: true
   },
   quantity: {
