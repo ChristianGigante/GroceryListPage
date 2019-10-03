@@ -10,6 +10,8 @@
 
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <title>Grocery List</title>
 </head>
 <style>
@@ -26,6 +28,7 @@
 
 <body>
     <center>
+
         <br><br>
         <div style="height: auto;display:none;width : 500px;" id="showForm">
             <input type="text" class="form-control" name="item" placeholder="Item"><br><br>
@@ -44,10 +47,10 @@
     <div class="container" style="display:inline;">
         <div id="showTable">
             <br><br>
-            <button id="add" class="btn btn-primary">ADD ITEM</button>
+            <button id="add" class="btn btn-outline-primary btn-lg" data-toggle="modal" data-target="#myModal">ADD ITEM</button>
             <br><br>
-            <table class="table ">
-                <thead class="thead" style="text-align: center">
+            <table class="table text-center table-hover table-bordered">
+                <thead class="thead thead-light">
                     <th>Item</th>
                     <th>Quantity</th>
                     <th>Priority</th>
@@ -133,12 +136,12 @@
                         boolean = false;
                     }
                 })
-                
-                    // if (item === null || quantity === null || priority=== null) {
-                    //     boolean = false;
-                    // }
-                
-                
+
+                // if (item === null || quantity === null || priority=== null) {
+                //     boolean = false;
+                // }
+
+
                 if (boolean == true) {
                     $.ajax({
                         url: "item/create",
@@ -165,7 +168,7 @@
                 else {
                     alert('All fields must be filled!')
                 }
-                
+
             });
 
             //remove Item on Tbl
@@ -209,7 +212,7 @@
             })
 
 
-            //remove Item function
+            //update Item function
             function updateItem(id) {
                 var item = $('input[name="itemUpdate"]');
                 var quantity = $('input[name="quantityUpdate"]');
@@ -232,8 +235,7 @@
                 })
             }
 
-            //retrieve one item
-            //remove Item function
+            //retrieve one item function
             function retrieveOneItem(id) {
                 $.ajax({
                     url: "item/retrieve/" + id + "",
