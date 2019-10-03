@@ -57,6 +57,13 @@ app.post('/item/update',function (req,res) {
   item.update(req,res,id);
 })
 
+//remove an item
+//item/delete - DELETE
+app.delete('/item/delete/:id', function (req,res) {
+  let id = req.params.id;
+  item.delete(req,res,id);
+})
+
 // listen for requests
 app.listen(port, () => {
   console.log("Server is listening on port " + port);
