@@ -27,19 +27,24 @@
 <body>
     <center>
         <br><br>
-        <div style="height: auto;width : 500px;" id="showForm">
+        <div style="height: auto;display:none;width : 500px;" id="showForm">
             <input type="text" class="form-control" name="item" placeholder="Item"><br><br>
-            <input type="text" class="form-control" name="quantity" placeholder="Quantity"><br><br>
-            <input type="text" class="form-control" name="priority" placeholder="Priority"><br><br>
+            <input type="number" class="form-control" name="quantity" placeholder="Quantity"><br><br>
+            <input type="number" class="form-control" name="priority" placeholder="Priority"><br><br>
             <button id="addItem" class="btn btn-success">ADD TO LIST</button>
         </div>
-
+        <div style="display:none; height: auto;display:none;width : 500px;" id="updateForm">
+            <input type="text" class="form-control" name="itemUpdate" placeholder="Item" value=" "><br><br>
+            <input type="number" class="form-control" name="quantityUpdate" placeholder="Quantity" value="0"><br><br>
+            <input type="number" class="form-control" name="priorityUpdate" placeholder="Priority" value="0"><br><br>
+            <button id="updateItem" class="btn btn-success">UPDATE</button>
+        </div>
     </center>
 
     <div class="container" style="display:inline;">
         <div id="showTable">
             <br><br>
-            <button id="addItem" class="btn btn-primary">ADD ITEM</button>
+            <button id="add" class="btn btn-primary">ADD ITEM</button>
             <br><br>
             <table class="table ">
                 <thead class="thead" style="text-align: center">
@@ -62,6 +67,7 @@
 
     <script>
         $(document).ready(function () {
+            var status = true;
 
             //retrieveAllData Function
             function retrieveAllData() {
@@ -81,20 +87,27 @@
                 })
             }
 
+            $("#add").click(function (e) {
+                e.preventDefault();
+                $("#showForm").show();
+                $("#showTable").hide();
+            })
+
             //invoking retrieveAllData function
             retrieveAllData();
 
-            // //button
-            // function actionButton() {
-            //     var btn = $("<button>")
-            // }
-
             //addRow function
+
             function addRow(data) {
-                var tr = $("<tr>").attr('id', data._id);
+                var tr = $("<tr>", {
+                    id: data._id,
+                    item: data.item,
+                    quantity: data.quantity,
+                    priority: data.priority
+                });
                 var btns = $("<div>").append($("<button>", {
-                    class: "btn btn-info btn-md update"
-                }).text("update"),
+                    class: "btn btn-info btn-md edit"
+                }).text("Edit"),
                     $("<button>", {
                         class: "btn btn-danger delete btn-md",
                     }).text("delete")
@@ -115,17 +128,22 @@
                 var quantity = $('input[name="quantity"]');
                 var priority = $('input[name="priority"]');
                 //iterate all input fields
-                $('input[type="text"]').each(function () {
+                $('input').each(function () {
                     if ($(this).val() == "") {
                         boolean = false;
                     }
                 })
-
+                
+                    // if (item === null || quantity === null || priority=== null) {
+                    //     boolean = false;
+                    // }
+                
+                
                 if (boolean == true) {
                     $.ajax({
                         url: "item/create",
                         crossDomain: true,
-                        type: "PUT",
+                        type: "POST",
                         data: {
                             item: item.val(),
                             quantity: quantity.val(),
@@ -138,33 +156,99 @@
                             console.log(e);
                         }
                     })
+                    item.val('');
+                    quantity.val('');
+                    priority.val('');
+                    $("#showForm").hide();
+                    $("#showTable").show();
                 }
                 else {
                     alert('All fields must be filled!')
                 }
-                $('input[type="text"]').empty();
+                
             });
 
             //remove Item on Tbl
             $(document).on("click", ".delete", function () {
-                alert($(this).parent().parent().parent().attr("id"))
+                // alert($(this).parent().parent().parent().attr("id"))
                 $(this).parent().parent().parent().fadeOut("slow");
+                deleteItem($(this).parent().parent().parent().attr("id"));
             })
 
+            //remove Item function
+            function deleteItem(id) {
                 $.ajax({
-                        url: "item/delete/"+ id.val(),
-                        crossDomain: true,
-                        type: "DELETE",
-                        success: function (data) {
-                            console.log(data);
-                        },
-                        error: function (e) {
-                            console.log(e);
-                        }
-                    })
+                    url: "item/delete/" + id + "",
+                    crossDomain: true,
+                    type: "DELETE",
+                    success: function (data) {
+                        console.log(data);
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                })
+            }
 
 
+            //update Item on Tbl
+            var updateId;
+            $(document).on("click", ".edit", function () {
+                status = false;
+                retrieveOneItem($(this).parent().parent().parent().attr("id"));
+                updateId = $(this).parent().parent().parent().attr("id");
+                $("#updateForm").show();
+                $("#showTable").hide();
 
+            })
+            $(document).on("click", "#updateItem", function () {
+                updateItem(updateId);
+                retrieveAllData();
+                $("#updateForm").hide();
+                $("#showTable").show();
+            })
+
+
+            //remove Item function
+            function updateItem(id) {
+                var item = $('input[name="itemUpdate"]');
+                var quantity = $('input[name="quantityUpdate"]');
+                var priority = $('input[name="priorityUpdate"]');
+                $.ajax({
+                    url: "item/update/" + id + "",
+                    crossDomain: true,
+                    type: "PUT",
+                    data: {
+                        item: item.val(),
+                        quantity: quantity.val(),
+                        priority: priority.val()
+                    },
+                    success: function (data) {
+                        console.log(data);
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                })
+            }
+
+            //retrieve one item
+            //remove Item function
+            function retrieveOneItem(id) {
+                $.ajax({
+                    url: "item/retrieve/" + id + "",
+                    crossDomain: true,
+                    type: "GET",
+                    success: function (data) {
+                        $('input[name="itemUpdate"]').val(data.item);
+                        $('input[name="quantityUpdate"]').val(data.quantity);
+                        $('input[name="priorityUpdate"]').val(data.priority);
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                })
+            }
 
         });
     </script>

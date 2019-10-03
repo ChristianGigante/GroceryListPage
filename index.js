@@ -52,7 +52,7 @@ app.get('/item/retrieve/:id', function (req,res) {
 
 //update an item
 //item/update - POST
-app.put('/item/update',function (req,res) {
+app.put('/item/update/:id',function (req,res) {
   let id = req.params.id;
   item.update(req,res,id);
 })

@@ -36,7 +36,7 @@ exports.findAll = (req, res) => {
         res.send(items);
     }).catch(err => {
         res.status(500).send({
-            message: err.message || "Some error occurred while retrieving notes."
+            message: err.message || "Some error occurred while retrieving Items."
         });
     });
 };
@@ -47,14 +47,14 @@ exports.findOne = (req, res, id) => {
     .then(items => {
         if(!items) {
             return res.status(404).send({
-                message: "Note not found with id " + id
+                message: "Item not found with id " + id
             });            
         }
         res.send(items);
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
-                message: "Note not found with id " + id
+                message: "Item not found with id " + id
             });                
         }
         return res.status(500).send({
@@ -63,17 +63,17 @@ exports.findOne = (req, res, id) => {
     });
 };
 
-// Update a note identified by the noteId in the request
+// Update a Item identified by the ItemId in the request
 exports.update = (req, res, id) => {
     // Validate Request
     // if(!req.body.content) {
     //     return res.status(400).send({
-    //         message: "Note content can not be empty"
+    //         message: "Item content can not be empty"
     //     });
     // }
 
-    // Find note and update it with the request body
-    Item.findByIdAndUpdate(id, {
+    // Find Item and update it with the request body
+    Item.findOneAndUpdate(id, {
         item: req.body.item, 
         quatity: req.body.quatity,
         priority: req.body.priority
@@ -81,40 +81,40 @@ exports.update = (req, res, id) => {
     .then(items => {
         if(!items) {
             return res.status(404).send({
-                message: "Note not found with id " + id
+                message: "Item not found with id " + id
             });
         }
         res.send(items);
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
-                message: "Note not found with id " + id
+                message: "Item not found with id " + id
             });                
         }
         return res.status(500).send({
-            message: "Error updating note with id " + id
+            message: "Error updating Item with id " + id
         });
     });
 };
 
-// Delete a itemswith the specified noteId in the request
+// Delete a item with the specified ItemId in the request
 exports.delete = (req, res, id) => {
-    Note.findByIdAndRemove(id)
+    Item.findByIdAndRemove(id)
     .then(items=> {
         if(!items) {
             return res.status(404).send({
-                message: "Note not found with id " + id
+                message: "Item not found with id " + id
             });
         }
-        res.send({message: "Note deleted successfully!"});
+        res.send({message: "Item deleted successfully!"});
     }).catch(err => {
         if(err.kind === 'ObjectId' || err.name === 'NotFound') {
             return res.status(404).send({
-                message: "Note not found with id " + id
+                message: "Item not found with id " + id
             });                
         }
         return res.status(500).send({
-            message: "Could not delete note with id " + id
+            message: "Could not delete Item with id " + id
         });
     });
 };

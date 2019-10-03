@@ -4,9 +4,23 @@ const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Shop = new Schema({
-  item: String,
-  quantity: Number,
-  priority: String
+  item: {
+    type: String,
+    unique: true,
+    required: true
+  },
+  quantity: {
+    type: Number,
+    unique: true,
+    required: true
+  },
+  priority: {
+    type: Number,
+    min: 1,
+    max: 3,
+    unique: true,
+    required: true
+  }
 });
 
 // Compile model from schema
