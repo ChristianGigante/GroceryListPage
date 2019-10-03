@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 
 var Shop = new Schema({
   item: String,
-  quantity: String,
+  quantity: Number,
   priority: String
 });
 

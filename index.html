@@ -46,8 +46,9 @@
                     <th>Item</th>
                     <th>Quantity</th>
                     <th>Priority</th>
+                    <th>Action</th>
                 </thead>
-                <tbody id="tbody">
+                <tbody>
                     <tr>
                         <td>
 
@@ -61,6 +62,7 @@
 
     <script>
         $(document).ready(function () {
+
             //retrieveAllData Function
             function retrieveAllData() {
                 $.ajax({
@@ -68,8 +70,9 @@
                     crossDomain: true,
                     type: "GET",
                     success: function (data) {
+                        $('tbody').empty();
                         data.forEach(element => {
-                            $("#tbody").append("<tr style ='text-align:center'><td>" + element.item + "</td><td>" + element.quantity + "</td><td>" + element.priority + "</td></tr>");
+                            addRow(element);
                         });
                     },
                     error: function (e) {
@@ -80,10 +83,28 @@
 
             //invoking retrieveAllData function
             retrieveAllData();
-            
+
+            // //button
+            // function actionButton() {
+            //     var btn = $("<button>")
+            // }
+
             //addRow function
             function addRow(data) {
-                $("#tbody").append("<tr style ='text-align:center'><td>" + data.item + "</td><td>" + data.quantity + "</td><td>" + data.priority + "</td></tr>");
+                var tr = $("<tr>").attr('id', data._id);
+                var btns = $("<div>").append($("<button>", {
+                    class: "btn btn-info btn-md update"
+                }).text("update"),
+                    $("<button>", {
+                        class: "btn btn-danger delete btn-md",
+                    }).text("delete")
+                )
+                $(tr).append(
+                    $("<td>").text(data.item),
+                    $("<td>").text(data.quantity),
+                    $("<td>").text(data.priority),
+                    $("<td>").append(btns)
+                ).appendTo($('tbody'));
             }
 
             //addItemEvent
@@ -123,6 +144,28 @@
                 }
                 $('input[type="text"]').empty();
             });
+
+            //remove Item on Tbl
+            $(document).on("click", ".delete", function () {
+                alert($(this).parent().parent().parent().attr("id"))
+                $(this).parent().parent().parent().fadeOut("slow");
+            })
+
+                $.ajax({
+                        url: "item/delete/"+ id.val(),
+                        crossDomain: true,
+                        type: "DELETE",
+                        success: function (data) {
+                            console.log(data);
+                        },
+                        error: function (e) {
+                            console.log(e);
+                        }
+                    })
+
+
+
+
         });
     </script>
 

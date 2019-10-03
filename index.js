@@ -34,7 +34,7 @@ mongoose.connect(dbConfig, { useNewUrlParser: true, useUnifiedTopology: true }
 });
 
 //adding new Item
-app.put('/item/create', function (req,res) {
+app.post('/item/create', function (req,res) {
   item.create(req,res);
 });
 
@@ -52,7 +52,7 @@ app.get('/item/retrieve/:id', function (req,res) {
 
 //update an item
 //item/update - POST
-app.post('/item/update',function (req,res) {
+app.put('/item/update',function (req,res) {
   let id = req.params.id;
   item.update(req,res,id);
 })
