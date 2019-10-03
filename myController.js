@@ -73,7 +73,7 @@ exports.update = (req, res, id) => {
     // }
 
     // Find Item and update it with the request body
-    Item.findOneAndUpdate(id, {
+    Item.findOneAndUpdate()(id, {
         item: req.body.item, 
         quatity: req.body.quatity,
         priority: req.body.priority
