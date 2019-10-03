@@ -33,8 +33,6 @@
             <input type="text" class="form-control" name="priority" placeholder="Priority"><br><br>
             <button id="addItem" class="btn btn-success">ADD TO LIST</button>
         </div>
-        <br><br>
-        <button id="retrieveAllData" class="btn btn-success">Retrieve All Data</button>
 
     </center>
 
@@ -63,9 +61,8 @@
 
     <script>
         $(document).ready(function () {
-            $("#retrieveAllData").on('click', function (e) {
-                e.preventDefault(e);
-                // alert('hi')
+            //retrieveAllData Function
+            function retrieveAllData() {
                 $.ajax({
                     url: "item/retrieve/all",
                     crossDomain: true,
@@ -74,16 +71,22 @@
                         data.forEach(element => {
                             $("#tbody").append("<tr style ='text-align:center'><td>" + element.item + "</td><td>" + element.quantity + "</td><td>" + element.priority + "</td></tr>");
                         });
-
-                        // $("#tbody").append("<tr style ='text-align:center'><td>" + data.item + "</td><td>" + data.quantity + "</td><td>" + data.priority + "</td></tr>");
                     },
                     error: function (e) {
                         console.log(e);
                     }
                 })
-            })
+            }
 
+            //invoking retrieveAllData function
+            retrieveAllData();
+            
+            //addRow function
+            function addRow(data) {
+                $("#tbody").append("<tr style ='text-align:center'><td>" + data.item + "</td><td>" + data.quantity + "</td><td>" + data.priority + "</td></tr>");
+            }
 
+            //addItemEvent
             $("#addItem").on('click', function (e) {
                 e.preventDefault(e);
                 var boolean = true;
@@ -108,7 +111,7 @@
                             priority: priority.val()
                         },
                         success: function (data) {
-                            console.log(data);
+                            addRow(data);
                         },
                         error: function (e) {
                             console.log(e);
@@ -118,9 +121,7 @@
                 else {
                     alert('All fields must be filled!')
                 }
-
                 $('input[type="text"]').empty();
-
             });
         });
     </script>
