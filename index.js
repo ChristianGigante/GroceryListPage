@@ -20,7 +20,7 @@ app.all('/', function (req, res) {
 
 
 // Configuring the database
-const dbConfig = 'mongodb://127.0.0.1/test';
+const dbConfig = 'mongodb://127.0.0.1:27017/test';
 
 mongoose.Promise = global.Promise;
 

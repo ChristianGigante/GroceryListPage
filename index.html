@@ -30,26 +30,43 @@
     <center>
 
         <br><br>
-        <div style="height: auto;display:none;width : 500px;" id="showForm">
-            <input type="text" class="form-control" name="item" placeholder="Item"><br><br>
-            <input type="number" class="form-control" name="quantity" placeholder="Quantity"><br><br>
-            <input type="number" class="form-control" name="priority" placeholder="Priority"><br><br>
-            <button id="addItem" class="btn btn-success">ADD TO LIST</button>
+        <!-- <div style="height: auto;display:none;width : 500px;" id="showForm"> -->
+        <div style="display:none;width : 400px;" id="showForm" class="card bg-secondary container">
+            <div class="card-header text-white">Add Item</div>
+            <div class="card-body text-center">
+                <input type="text" class="form-control" name="item" placeholder="Name"><br>
+                <input type="number" class="form-control" name="quantity" placeholder="Quantity"><br>
+                <input type="number" class="form-control" name="priority" placeholder="Priority">
+            </div>
+            <div class="card-footer">
+                <button id="addItem" class="btn btn-success">ADD TO LIST</button>
+                <button id="cancel" class="btn btn-danger">CANCEL</button>
+            </div>
         </div>
-        <div style="display:none; height: auto;display:none;width : 500px;" id="updateForm">
-            <input type="text" class="form-control" name="itemUpdate" placeholder="Item" value=" "><br><br>
-            <input type="number" class="form-control" name="quantityUpdate" placeholder="Quantity" value="0"><br><br>
-            <input type="number" class="form-control" name="priorityUpdate" placeholder="Priority" value="0"><br><br>
-            <button id="updateItem" class="btn btn-success">UPDATE</button>
+        <br>
+        <!-- <div style="display:none; height: auto;display:none;width : 500px;" id="updateForm"> -->
+        <div style="display:none;width : 400px;" id="updateForm" class="card bg-secondary container">
+            <div class="card-header text-white">Update Item</div>
+            <div class="card-body text-center">
+
+                <input type="text" class="form-control" name="itemUpdate" placeholder="Name" value=" "><br>
+                <input type="number" class="form-control" name="quantityUpdate" placeholder="Quantity" value="0"><br>
+                <input type="number" class="form-control" name="priorityUpdate" placeholder="Priority" value="0">
+            </div>
+            <div class="card-footer">
+                <button id="updateItem" class="btn btn-success">UPDATE</button>
+                <button id="cancel" class="btn btn-danger">CANCEL</button>
+            </div>
         </div>
     </center>
 
     <div class="container" style="display:inline;">
         <div id="showTable">
             <br><br>
-            <button id="add" class="btn btn-outline-primary btn-lg" data-toggle="modal" data-target="#myModal">ADD ITEM</button>
+            <button id="add" class="btn btn-outline-primary btn-lg" data-toggle="modal" data-target="#myModal">ADD
+                ITEM</button>
             <br><br>
-            <table class="table text-center table-hover table-bordered">
+            <table class="table text-center table-hover">
                 <thead class="thead thead-light">
                     <th>Item</th>
                     <th>Quantity</th>
@@ -57,13 +74,7 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-
-                        </td>
-                    </tr>
                 </tbody>
-
             </table>
         </div>
     </div>
@@ -90,17 +101,27 @@
                 })
             }
 
+            //invoking retrieveAllData function
+            retrieveAllData();
+
+            //click add button
             $("#add").click(function (e) {
                 e.preventDefault();
                 $("#showForm").show();
                 $("#showTable").hide();
             })
 
-            //invoking retrieveAllData function
-            retrieveAllData();
+            //click cancel button
+            $("#cancel").click(function (e) {
+                e.preventDefault();
+                $("input").empty();
+                $("#showForm").hide();
+                $("#updateForm").hide();
+                $("#showTable").show();
+            })
+
 
             //addRow function
-
             function addRow(data) {
                 var tr = $("<tr>", {
                     id: data._id,
