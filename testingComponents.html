@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>Testing</title>
+</head>
+
+<body>
+    <div style="width : 400px;" id="showForm" class="card bg-secondary container text-center">
+        <div class="card-header text-white">Add Item</div>
+        <div class="card-body text-center">
+            <input type="text" class="form-control" name="item" placeholder="Name"><br>
+            <input type="number" class="form-control" name="quantity" placeholder="Quantity" min=1 step="1"><br>
+            <input type="number" class="form-control" name="priority" placeholder="Priority" min="1" max="3">
+        </div>
+        <div class="card-footer">
+            <button id="addItem" class="btn btn-success">ADD TO LIST</button>
+            <button id="cancel" class="btn btn-danger">CANCEL</button>
+        </div>
+    </div>
+    <script>
+    
+    $(document).ready(function () {
+        $("#addItem").on('click',function () {
+            $('input').each(function () {
+                if($(this).val() == ''){
+                    alert('empty')
+                }
+                
+            })
+            if(!Number($('input[name="quantity"]'))){
+                    alert('is NOT a Number')
+                }
+        })
+    })
+
+    </script>
+</body>
+
+</html>

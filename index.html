@@ -35,8 +35,8 @@
             <div class="card-header text-white">Add Item</div>
             <div class="card-body text-center">
                 <input type="text" class="form-control" name="item" placeholder="Name"><br>
-                <input type="number" class="form-control" name="quantity" placeholder="Quantity"><br>
-                <input type="number" class="form-control" name="priority" placeholder="Priority">
+                <input type="number" class="form-control" name="quantity" placeholder="Quantity" min=1 step="1"><br>
+                <input type="number" class="form-control" name="priority" placeholder="Priority" min="1" max="3">
             </div>
             <div class="card-footer">
                 <button id="addItem" class="btn btn-success">ADD TO LIST</button>
@@ -50,8 +50,8 @@
             <div class="card-body text-center">
 
                 <input type="text" class="form-control" name="itemUpdate" placeholder="Name" value=" "><br>
-                <input type="number" class="form-control" name="quantityUpdate" placeholder="Quantity" value="0"><br>
-                <input type="number" class="form-control" name="priorityUpdate" placeholder="Priority" value="0">
+                <input type="number" class="form-control" name="quantityUpdate" placeholder="Quantity" value="0" min=1><br>
+                <input type="number" class="form-control" name="priorityUpdate" placeholder="Priority" value="0" min="1" max="3">
             </div>
             <div class="card-footer">
                 <button id="updateItem" class="btn btn-success">UPDATE</button>
@@ -114,10 +114,10 @@
             //click cancel button
             $("#cancel").click(function (e) {
                 e.preventDefault();
-                $("input").empty();
                 $("#showForm").hide();
                 $("#updateForm").hide();
                 $("#showTable").show();
+                $("input").val('');
             })
 
 
