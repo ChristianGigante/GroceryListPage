@@ -33,10 +33,13 @@
         <!-- <div style="height: auto;display:none;width : 500px;" id="showForm"> -->
         <div style="display:none;width : 400px;" id="showForm" class="card bg-secondary container">
             <div class="card-header text-white">Add Item</div>
-            <div class="card-body text-center">
-                <input type="text" class="form-control" name="item" placeholder="Name"><br>
-                <input type="number" class="form-control" name="quantity" placeholder="Quantity" min=1 step="1"><br>
-                <input type="number" class="form-control" name="priority" placeholder="Priority" min="1" max="3">
+            <div class="card-body text-center ">
+                    <form action="" class="form">
+                        <input type="text" class="form-control" name="item" placeholder="Name" required autofocus><br>
+                        <input type="number" class="form-control" name="quantity" placeholder="Quantity" min=1 step="1" required><br>
+                        <input type="number" class="form-control" name="priority" placeholder="Priority" min="1" max="3"  required>
+                      </form>
+
             </div>
             <div class="card-footer">
                 <button id="addItem" class="btn btn-success">ADD TO LIST</button>
@@ -49,13 +52,14 @@
             <div class="card-header text-white">Update Item</div>
             <div class="card-body text-center">
 
-                <input type="text" class="form-control" name="itemUpdate" placeholder="Name" value=" "><br>
-                <input type="number" class="form-control" name="quantityUpdate" placeholder="Quantity" value="0" min=1><br>
-                <input type="number" class="form-control" name="priorityUpdate" placeholder="Priority" value="0" min="1" max="3">
+                <input type="text" class="form-control" name="itemUpdate" placeholder="Name" value=" " autofocus required=""><br>
+                <input type="number" class="form-control" name="quantityUpdate" placeholder="Quantity" value="0" min=1 required=""><br>
+                <input type="number" class="form-control" name="priorityUpdate" placeholder="Priority" value="0" min="1"
+                    max="3" required="">
             </div>
             <div class="card-footer">
                 <button id="updateItem" class="btn btn-success">UPDATE</button>
-                <button id="cancel" class="btn btn-danger">CANCEL</button>
+                <button id="updateCancel" class="btn btn-danger">CANCEL</button>
             </div>
         </div>
     </center>
@@ -112,12 +116,19 @@
             })
 
             //click cancel button
-            $("#cancel").click(function (e) {
+            $("#cancel").on('click', function (e) {
                 e.preventDefault();
                 $("#showForm").hide();
+                $("#showTable").show();
+                let item = $('input[name="item"]').val('');
+                let quantity = $('input[name="quantity"]').val('');
+                let priority = $('input[name="priority"]').val('');
+            })
+                        //click cancel button
+            $("#updateCancel").on('click', function (e) {
+                e.preventDefault();
                 $("#updateForm").hide();
                 $("#showTable").show();
-                $("input").val('');
             })
 
 
@@ -151,20 +162,7 @@
                 var item = $('input[name="item"]');
                 var quantity = $('input[name="quantity"]');
                 var priority = $('input[name="priority"]');
-                //iterate all input fields
-                $('input').each(function () {
-                    if ($(this).val() == "") {
-                        boolean = false;
-                    }
-                })
-
-                // if (item === null || quantity === null || priority=== null) {
-                //     boolean = false;
-                // }
-
-
-                if (boolean == true) {
-                    $.ajax({
+                $.ajax({
                         url: "item/create",
                         crossDomain: true,
                         type: "POST",
@@ -184,11 +182,47 @@
                     quantity.val('');
                     priority.val('');
                     $("#showForm").hide();
-                    $("#showTable").show();
-                }
-                else {
-                    alert('All fields must be filled!')
-                }
+                    $("#showTable").show();    
+
+
+                //iterate all input fields
+                // $('input').each(function () {
+                //     if ($(this).val() == "") {
+                //         boolean = false;
+                //     }
+                // })
+
+                // if (item === null || quantity === null || priority=== null) {
+                //     boolean = false;
+                // }
+
+
+                // if (boolean == true) {
+                //     $.ajax({
+                //         url: "item/create",
+                //         crossDomain: true,
+                //         type: "POST",
+                //         data: {
+                //             item: item.val(),
+                //             quantity: quantity.val(),
+                //             priority: priority.val()
+                //         },
+                //         success: function (data) {
+                //             addRow(data);
+                //         },
+                //         error: function (e) {
+                //             console.log(e);
+                //         }
+                //     })
+                //     item.val('');
+                //     quantity.val('');
+                //     priority.val('');
+                //     $("#showForm").hide();
+                //     $("#showTable").show();
+                // }
+                // else {
+                //     alert('All fields must be filled!')
+                // }
 
             });
 

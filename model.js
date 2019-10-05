@@ -10,6 +10,7 @@ var Shop = new Schema({
   },
   quantity: {
     type: Number,
+    min: 1,
     required: true
   },
   priority: {
