@@ -28,9 +28,6 @@
 
 <body>
     <center>
-
-        <br><br>
-        <!-- <div style="height: auto;display:none;width : 500px;" id="showForm"> -->
         <div style="display:none;width : 400px;" id="showForm" class="card bg-secondary container">
             <div class="card-header text-white">Add Item</div>
             <div class="card-body text-center ">
@@ -41,15 +38,14 @@
                     <input type="number" class="form-control" name="priority" placeholder="Priority" min="1" max="3"
                         required>
                 </form>
-
             </div>
             <div class="card-footer">
                 <button id="addItem" class="btn btn-success">ADD TO LIST</button>
                 <button id="cancel" class="btn btn-danger">CANCEL</button>
             </div>
         </div>
+        <!-- updateForm -->
         <br>
-        <!-- <div style="display:none; height: auto;display:none;width : 500px;" id="updateForm"> -->
         <div style="display:none;width : 400px;" id="updateForm" class="card bg-secondary container">
             <div class="card-header text-white">Update Item</div>
             <div class="card-body text-center">
@@ -150,7 +146,7 @@
                 }).text("Edit"),
                     $("<button>", {
                         class: "btn btn-danger delete btn-md",
-                    }).text("delete")
+                    }).text("Delete")
                 )
                 $(tr).append(
                     $("<td>").text(data.item),
