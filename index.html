@@ -71,7 +71,305 @@
             <button id="add" class="btn btn-outline-primary btn-lg" data-toggle="modal" data-target="#myModal">ADD
                 ITEM</button>
             <br><br>
+            <table class="table text-cente<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>Grocery List</title>
+</head>
+<style>
+    body {
+        color: #000;
+        font-size: 20px;
+        line-height: 135%;
+        width: 100%;
+        word-break: break-word;
+        width: 80%;
+        margin-left: 10%;
+    }
+</style>
+
+<body>
+    <center>
+        <div style="display:none;width : 400px;" id="showForm" class="card bg-secondary container">
+            <div class="card-header text-white">Add Item</div>
+            <div class="card-body text-center ">
+                <form action="" class="form was-validated">
+                    <input type="text" class="form-control" name="item" placeholder="Name" required autofocus><br>
+                    <input type="number" class="form-control" name="quantity" placeholder="Quantity" min="1" step="1"
+                        required><br>
+                    <input type="number" class="form-control" name="priority" placeholder="Priority" min="1" max="3"
+                        required>
+                </form>
+            </div>
+            <div class="card-footer">
+                <button id="addItem" class="btn btn-success">ADD TO LIST</button>
+                <button id="cancel" class="btn btn-danger">CANCEL</button>
+            </div>
+        </div>
+        <!-- updateForm -->
+        <br>
+        <div style="display:none;width : 400px;" id="updateForm" class="card bg-secondary container">
+            <div class="card-header text-white">Update Item</div>
+            <div class="card-body text-center">
+                <form action="" class="form was-validated">
+                    <input type="text" class="form-control" name="itemUpdate" placeholder="Name" required autofocus><br>
+                    <input type="number" class="form-control" name="quantityUpdate" placeholder="Quantity"
+                        min="1" required><br>
+                    <input type="number" class="form-control" name="priorityUpdate" placeholder="Priority"
+                        min="1" max="3" required>
+                </form>
+            </div>
+            <div class="card-footer">
+                <button id="updateItem" class="btn btn-success" >UPDATE</button>
+                <button id="updateCancel" class="btn btn-danger">CANCEL</button>
+            </div>
+        </div>
+    </center>
+
+    <div class="container" style="display:inline;">
+        <div id="showTable">
+            <br><br>
+            <button id="add" class="btn btn-outline-primary btn-lg" data-toggle="modal" data-target="#myModal">ADD
+                ITEM</button>
+            <br><br>
             <table class="table text-center table-hover">
+                <thead class="thead thead-light">
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Priority</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var status = true;
+
+            //retrieveAllData Function
+            function retrieveAllData() {
+                $.ajax({
+                    url: "item/retrieve/all",
+                    crossDomain: true,
+                    type: "GET",
+                    success: function (data) {
+                        $('tbody').empty();
+                        data.forEach(element => {
+                            addRow(element);
+                        });
+                    },
+                    error: function (e) {
+                        alert(e + "")
+                    }
+                })
+            }
+
+            //invoking retrieveAllData function
+            retrieveAllData();
+
+            //click add button
+            $("#add").click(function (e) {
+                e.preventDefault();
+                $("#showForm").show();
+                $("#showTable").hide();
+            })
+
+            //click cancel button
+            $("#cancel").on('click', function (e) {
+                e.preventDefault();
+                $("#showForm").hide();
+                $("#showTable").show();
+                let item = $('input[name="item"]').val('');
+                let quantity = $('input[name="quantity"]').val('');
+                let priority = $('input[name="priority"]').val('');
+            })
+            //click cancel button
+            $("#updateCancel").on('click', function (e) {
+                e.preventDefault();
+                $("#updateForm").hide();
+                $("#showTable").show();
+            })
+
+
+            //addRow function
+            function addRow(data) {
+                var tr = $("<tr>", {
+                    id: data._id,
+                    item: data.item,
+                    quantity: data.quantity,
+                    priority: data.priority
+                });
+                var btns = $("<div>").append($("<button>", {
+                    class: "btn btn-info btn-md edit"
+                }).text("Edit"),
+                    $("<button>", {
+                        class: "btn btn-danger delete btn-md",
+                    }).text("Delete")
+                )
+                $(tr).append(
+                    $("<td>").text(data.item),
+                    $("<td>").text(data.quantity),
+                    $("<td>").text(data.priority),
+                    $("<td>").append(btns)
+                ).appendTo($('tbody'));
+            }
+
+            //addItemEvent
+            $("#addItem").on('click', function (e) {
+                e.preventDefault(e);
+                var boolean = true;
+                var item = $('input[name="item"]');
+                checkInput(item);
+                var quantity = $('input[name="quantity"]');
+                var priority = $('input[name="priority"]');
+
+                //iterate all input fields
+                $('#showForm input').each(function () {
+                    if ($(this).val() == "") {
+                        boolean = false;
+                    }
+                })
+                if (boolean == true) {
+                    $.ajax({
+                        url: "item/create",
+                        crossDomain: true,
+                        type: "POST",
+                        data: {
+                            item: item.val(),
+                            quantity: quantity.val(),
+                            priority: priority.val()
+                        },
+                        success: function (data) {
+                            addRow(data);
+                        },
+                        error: function (e) {
+                            alert(e + "")
+                        }
+                    })
+                    item.val('');
+                    quantity.val('');
+                    priority.val('');
+                    $("#showForm").hide();
+                    $("#showTable").show();
+                }
+                else {
+                    alert('All fields must be filled!')
+                }
+
+            });
+
+            //remove Item on Tbl
+            $(document).on("click", ".delete", function () {
+                // alert($(this).parent().parent().parent().attr("id"))
+                $(this).parent().parent().parent().fadeOut("slow");
+                deleteItem($(this).parent().parent().parent().attr("id"));
+            })
+
+            //remove Item function
+            function deleteItem(id) {
+                $.ajax({
+                    url: "item/delete/" + id + "",
+                    crossDomain: true,
+                    type: "DELETE",
+                    success: function (data) {
+                        console.log(data);
+                    },
+                    error: function (e) {
+                        alert(e + "")
+                    }
+                })
+            }
+
+
+            //update Item on Tbl
+            var updateId;
+            $(document).on("click", ".edit", function () {
+                status = false;
+                retrieveOneItem($(this).parent().parent().parent().attr("id"));
+                updateId = $(this).parent().parent().parent().attr("id");
+                $("#updateForm").show();
+                $("#showTable").hide();
+
+            })
+            $(document).on("click", "#updateItem", function () {
+                updateItem(updateId);
+                retrieveAllData();
+                $("#updateForm").hide();
+                $("#showTable").show();
+            })
+
+
+            function checkInput(label) {
+                if (!(isNaN($(label).val()))) {
+                    alert('Item must not be a number!');
+                    $("input").val("");
+                }
+            }
+
+
+            //update Item function
+            function updateItem(id) {
+                var item = $('input[name="itemUpdate"]');
+                checkInput(item);
+                var quantity = $('input[name="quantityUpdate"]');
+                var priority = $('input[name="priorityUpdate"]');
+                $.ajax({
+                    url: "item/update/" + id + "",
+                    crossDomain: true,
+                    type: "PUT",
+                    data: {
+                        item: item.val(),
+                        quantity: quantity.val(),
+                        priority: priority.val()
+                    },
+                    success: function (data) {
+                        console.log(data);
+                    },
+                    error: function (e) {
+                        alert(e + "")
+                    }
+                })
+            }
+
+            //retrieve one item function
+            function retrieveOneItem(id) {
+                $.ajax({
+                    url: "item/retrieve/" + id + "",
+                    crossDomain: true,
+                    type: "GET",
+                    success: function (data) {
+                        $('input[name="itemUpdate"]').val(data.item);
+                        $('input[name="quantityUpdate"]').val(data.quantity);
+                        $('input[name="priorityUpdate"]').val(data.priority);
+                    },
+                    error: function (e) {
+                        alert(e + "")
+                    }
+                })
+            }
+
+        });
+    </script>
+
+</body>
+
+
+</html>
+r table-hover">
                 <thead class="thead thead-light">
                     <th>Item</th>
                     <th>Quantity</th>
